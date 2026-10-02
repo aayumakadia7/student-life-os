@@ -26,7 +26,7 @@ export const StudyPlannerPage: React.FC = () => {
 
   // Exam Form
   const [examSubject, setExamSubject] = useState('')
-  const [examDate, setExamDate] = useState(new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0])
+  const [examDate, setExamDate] = useState(() => new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0])
   const [examTime, setExamTime] = useState('10:00 AM')
   const [examRoom, setExamRoom] = useState('Main Exam Hall')
   const [examSyllabus, setExamSyllabus] = useState('')

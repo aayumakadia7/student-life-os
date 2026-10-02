@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useApp } from '../../context/AppContext'
-import { Expense, ExpenseCategory } from '../../types'
+import { ExpenseCategory } from '../../types'
 import { ExpenseCard } from '../../components/domain/ExpenseCard'
 import { StatCard } from '../../components/ui/StatCard'
 import { Button } from '../../components/ui/Button'

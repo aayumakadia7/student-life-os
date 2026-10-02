@@ -140,10 +140,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [preferences.theme])
 
   // Deterministic Recommendation
-  const [recommendation, setRecommendation] = useState<Recommendation | null>(null)
-  useEffect(() => {
-    const rec = getNextRecommendedTask(tasks, timetable, exams)
-    setRecommendation(rec)
+  const recommendation = React.useMemo(() => {
+    return getNextRecommendedTask(tasks, timetable, exams)
   }, [tasks, timetable, exams])
 
   // --- Task Actions ---

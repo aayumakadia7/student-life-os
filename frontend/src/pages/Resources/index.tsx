@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useApp } from '../../context/AppContext'
-import { Resource, ResourceType } from '../../types'
+import { ResourceType } from '../../types'
 import { ResourceCard } from '../../components/domain/ResourceCard'
 import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
