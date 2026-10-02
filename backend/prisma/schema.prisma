@@ -1,0 +1,203 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String           @id @default(cuid())
+  name         String
+  email        String           @unique
+  passwordHash String
+  college      String           @default("")
+  course       String           @default("")
+  semester     String           @default("")
+  avatarUrl    String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  preferences     UserPreferences?
+  tasks           Task[]
+  timetable       TimetableEntry[]
+  assignments     Assignment[]
+  attendance      AttendanceRecord[]
+  expenses        Expense[]
+  exams           Exam[]
+  studyTopics     StudyTopic[]
+  studySessions   StudySession[]
+  resources       Resource[]
+
+  @@map("users")
+}
+
+model UserPreferences {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme               String   @default("dark")
+  attendanceTarget    Int      @default(75)
+  currency            String   @default("USD")
+  timeFormat          String   @default("12h")
+  assignmentReminders Boolean  @default(true)
+  taskReminders       Boolean  @default(true)
+  attendanceAlerts    Boolean  @default(true)
+  studyReminders      Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("user_preferences")
+}
+
+model Task {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  subject          String
+  priority         String   @default("medium") // low | medium | high | urgent
+  status           String   @default("todo")   // todo | in_progress | completed
+  deadline         String                      // YYYY-MM-DD
+  estimatedMinutes Int      @default(30)
+  description      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+  @@map("tasks")
+}
+
+model TimetableEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject   String
+  code      String?
+  teacher   String
+  room      String
+  day       String   // Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+  startTime String   // "09:00"
+  endTime   String   // "10:00"
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("timetable_entries")
+}
+
+model Assignment {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  subject        String
+  description    String
+  dueDate        String   // YYYY-MM-DD
+  priority       String   @default("medium") // low | medium | high | urgent
+  status         String   @default("not_started") // not_started | in_progress | submitted | completed
+  estimatedHours Float    @default(2.0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId])
+  @@map("assignments")
+}
+
+model AttendanceRecord {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject          String
+  code             String
+  held             Int      @default(0)
+  attended         Int      @default(0)
+  targetPercentage Int      @default(75)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+  @@map("attendance_records")
+}
+
+model Expense {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  amount    Float
+  category  String   // Food | Transport | Education | Shopping | Entertainment | Health | Other
+  date      String   // YYYY-MM-DD
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("expenses")
+}
+
+model Exam {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject   String
+  examDate  String   // YYYY-MM-DD
+  time      String?
+  room      String?
+  syllabus  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("exams")
+}
+
+model StudyTopic {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject    String
+  topic      String
+  difficulty String   @default("medium") // easy | medium | hard
+  progress   Int      @default(0)        // 0 to 100
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+  @@map("study_topics")
+}
+
+model StudySession {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject         String
+  topic           String
+  date            String   // YYYY-MM-DD
+  durationMinutes Int      @default(30)
+  completed       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@map("study_sessions")
+}
+
+model Resource {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  subject     String
+  type        String   // PDF | Website | YouTube | GitHub | Notes | Other
+  url         String
+  description String
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@map("resources")
+}

@@ -194,14 +194,51 @@ npm run build
 
 ---
 
-## 🔮 Future Development Phases
+---
 
-1. **Phase 2: Backend & Database Integration**
-   - NestJS API backend with TypeScript.
-   - PostgreSQL database with Prisma ORM migrations.
-   - JWT authentication & secure HTTP-only cookies.
-   - Switch frontend services (`src/services/`) from local storage to real REST endpoints.
-2. **Phase 3: AI Copilot Modules**
-   - Connect LLM API to replace deterministic `recommendation.ts` with adaptive AI study scheduling.
-   - AI Flashcard and Viva Question Generator from lecture notes.
-   - Syllabus exam roadmap generator.
+## 🛠️ Full-Stack Setup (Frontend + Backend)
+
+### 1. Start PostgreSQL
+Run PostgreSQL with Docker:
+```bash
+docker run --name student-life-postgres \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=student_life_os \
+  -p 5432:5432 \
+  -d postgres:16
+```
+
+### 2. Setup & Run Backend
+```bash
+cd backend
+npm install
+npx prisma generate
+npx prisma migrate dev --name init
+npm run prisma:seed
+npm run start:dev
+```
+- API Base: `http://localhost:3000/api`
+- Swagger Documentation: `http://localhost:3000/api/docs`
+- Health check: `http://localhost:3000/api/health`
+
+### 3. Start Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open `http://localhost:5173`.
+
+### 4. Build Entire Full-Stack Monorepo
+From root:
+```bash
+npm run build
+```
+
+---
+
+## 🔮 Next Development Phase: AI Copilot Modules
+- Connect LLM API to augment deterministic `recommendation.ts` with adaptive AI study scheduling.
+- AI Flashcard and Viva Question Generator from lecture notes.
+- Syllabus exam roadmap generator.
