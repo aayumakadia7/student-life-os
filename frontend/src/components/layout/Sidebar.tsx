@@ -15,7 +15,9 @@ import {
   Moon,
   Sun,
   X,
+  Sparkles,
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useApp } from '../../context/AppContext'
 
@@ -27,6 +29,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth()
   const { preferences, updatePreferences } = useApp()
+  const navigate = useNavigate()
 
   const navItems = [
     { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
@@ -98,6 +101,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       {/* Footer / User Profile & Controls */}
       <div className="p-3 border-t border-zinc-100 dark:border-zinc-900 space-y-2">
+        {/* 3D Experience Tour Button */}
+        <button
+          onClick={() => {
+            if (onClose) onClose()
+            navigate('/intro')
+          }}
+          className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/50 border border-purple-200 dark:border-purple-800/60 rounded-xl transition-all cursor-pointer shadow-xs"
+        >
+          <span className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-purple-500 animate-spin-slow" />
+            <span>3D Intro Experience</span>
+          </span>
+          <span className="text-[10px] font-mono uppercase bg-purple-200/60 dark:bg-purple-800/60 text-purple-800 dark:text-purple-200 px-1.5 py-0.5 rounded">
+            3D
+          </span>
+        </button>
+
         <button
           onClick={toggleTheme}
           className="w-full flex items-center justify-between px-3 py-2 text-xs text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-colors cursor-pointer"
@@ -124,9 +144,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </div>
 
             <button
-              onClick={logout}
-              title="Logout"
-              className="p-1.5 text-zinc-400 hover:text-rose-500 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              onClick={() => {
+                logout()
+                navigate('/intro')
+              }}
+              title="Logout to 3D Intro"
+              className="p-1.5 text-zinc-400 hover:text-rose-500 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
             </button>

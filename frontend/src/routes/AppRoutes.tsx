@@ -19,30 +19,37 @@ import { SettingsPage } from '../pages/Settings'
 import { LoginPage } from '../pages/Login'
 import { RegisterPage } from '../pages/Register'
 import { ForgotPasswordPage } from '../pages/ForgotPassword'
+// 3D Intro Experience Page
+import { IntroExperiencePage } from '../pages/IntroExperience'
+// Single Scroll Layout with Horizontal Navbar
+import { SingleScrollFeed } from '../pages/SingleScrollFeed'
 
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Root redirect to /dashboard */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* 3D 2-Page Scroll & Student Logo Intro Experience */}
+      <Route path="/" element={<IntroExperiencePage />} />
+      <Route path="/intro" element={<IntroExperiencePage />} />
+      <Route path="/login" element={<IntroExperiencePage />} />
 
-      {/* Main App Layout and protected routes */}
-      <Route element={<AppLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/timetable" element={<TimetablePage />} />
-        <Route path="/tasks" element={<TasksPage />} />
-        <Route path="/assignments" element={<AssignmentsPage />} />
-        <Route path="/attendance" element={<AttendancePage />} />
-        <Route path="/expenses" element={<ExpensesPage />} />
-        <Route path="/study" element={<StudyPlannerPage />} />
-        <Route path="/resources" element={<ResourcesPage />} />
-        <Route path="/analytics" element={<AnalyticsPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-      </Route>
+      {/* Single Scroll App with Horizontal Navbar (8 Modules) */}
+      <Route path="/dashboard" element={<SingleScrollFeed />} />
+      <Route path="/classes" element={<SingleScrollFeed />} />
+      <Route path="/timetable" element={<SingleScrollFeed />} />
+      <Route path="/tasks" element={<SingleScrollFeed />} />
+      <Route path="/assignments" element={<SingleScrollFeed />} />
+      <Route path="/attendance" element={<SingleScrollFeed />} />
+      <Route path="/resources" element={<SingleScrollFeed />} />
+      <Route path="/expenses" element={<SingleScrollFeed />} />
+      <Route path="/study" element={<SingleScrollFeed />} />
+      <Route path="/calendar" element={<SingleScrollFeed />} />
+      <Route path="/profile" element={<SingleScrollFeed />} />
+      <Route path="/analytics" element={<SingleScrollFeed />} />
+      <Route path="/settings" element={<SingleScrollFeed />} />
 
       {/* Auth Layout and routes */}
       <Route element={<AuthLayout />}>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/classic-login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>

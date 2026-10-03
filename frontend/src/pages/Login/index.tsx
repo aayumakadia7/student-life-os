@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../context/ToastContext'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
+import { StudentLogoTransition } from '../../components/3d/StudentLogoTransition'
+import { Sparkles } from 'lucide-react'
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth()
@@ -13,17 +15,23 @@ export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('aayu@student.edu')
   const [password, setPassword] = useState('password123')
   const [isLoading, setIsLoading] = useState(false)
+  const [showLogoTransition, setShowLogoTransition] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    // Trigger the student logo animation before loading dashboard
+    setShowLogoTransition(true)
+  }
+
+  const handleTransitionComplete = async () => {
     try {
       await login(email, password)
-      toast({ title: 'Welcome back!', message: 'Logged in successfully', type: 'success' })
+      toast({ title: 'Welcome back, Scholar!', message: 'Logged in successfully', type: 'success' })
       navigate('/dashboard')
     } catch {
       toast({ title: 'Error', message: 'Unable to sign in', type: 'error' })
-    } finally {
+      setShowLogoTransition(false)
       setIsLoading(false)
     }
   }
@@ -71,12 +79,30 @@ export const LoginPage: React.FC = () => {
         </Button>
       </form>
 
-      <div className="text-center text-xs text-zinc-500 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-        Don't have an account?{' '}
-        <Link to="/register" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
-          Create one now
-        </Link>
+      <div className="text-center text-xs text-zinc-500 pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+        <div>
+          Don't have an account?{' '}
+          <Link to="/register" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+            Create one now
+          </Link>
+        </div>
+        <div>
+          <Link
+            to="/intro"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-500"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Launch 3D Scroll Experience</span>
+          </Link>
+        </div>
       </div>
+
+      {showLogoTransition && (
+        <StudentLogoTransition
+          studentName={email.split('@')[0] || 'Scholar'}
+          onComplete={handleTransitionComplete}
+        />
+      )}
     </div>
   )
 }
